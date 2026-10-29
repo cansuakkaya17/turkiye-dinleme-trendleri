@@ -1,0 +1,23 @@
+name: Gunluk Last.fm Veri Guncelleme
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Her gün sabah saat 08:00'de çalışır
+  workflow_dispatch: # Elimizle istediğimiz an çalıştırabilmemiz için
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Depoyu Indir
+        uses: actions/checkout@v3
+
+      - name: Veri Guncelleme Similasyonu
+        run: |
+          echo "Son guncelleme tarihi: $(date)" > update-log.txt
+
+      - name: Degisiklikleri Kaydet ve Depoya Gonder
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Otomatik veri guncellemesi (Last.fm)"
+          branch: ana
